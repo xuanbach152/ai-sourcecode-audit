@@ -1,5 +1,7 @@
 
 _tham_khao/
+thiet_ke/*
+!thiet_ke/banner.svg
 
 __pycache__/
 *.py[cod]
@@ -56,3 +58,7 @@ logs/
 tmp/
 temp/
 *.tmp
+
+.aiscan-run/
+
+AISCAN-2*/

@@ -1,0 +1,222 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "codevgw/zai-org/GLM-5.3-Flash",
+  "//": "AIScan - mot agent lead + bay vai agent (mode all de codev run --agent goi duoc headless; fork tu choi goi subagent) + provider cong SSO Codev. Prompt lay tu phat_trien_loi/prompts/. LUU Y: Codev thay the cu phap tham chieu file va bien moi truong o MOI chuoi trong config - dung viet cu phap do ra day.",
+  "provider": {
+    "codevgw": {
+      "name": "Codev Gateway (SSO)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://netmind.viettel.vn/gateway/v1",
+        "apiKey": "{env:CODEV_GW_API_KEY}"
+      },
+      "models": {
+        "zai-org/GLM-5.3-Flash": {
+          "name": "GLM 5.3 Flash",
+          "limit": {
+            "context": 200000,
+            "input": 200000,
+            "output": 65536
+          }
+        }
+      }
+    },
+    "aigw": {
+      "name": "Viettel AI Gateway",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://stream-netmind.viettel.vn/aigw/ai/v1",
+        "apiKey": "{env:AIGW_API_KEY}"
+      },
+      "models": {
+        "MiniMax/MiniMax-M3": {
+          "name": "MiniMax M3",
+          "limit": {
+            "context": 262144,
+            "input": 262144,
+            "output": 65536
+          }
+        }
+      }
+    }
+  },
+  "agent": {
+    "aiscan-lead": {
+      "description": "Security Lead cua AIScan: noi chuyen voi nguoi dung, do lua muc cong va scope, chay mot lenh quet qua pipeline Python, va trinh bao cao da kiem chung. Ba che do khac chua phat trien.",
+      "mode": "all",
+      "prompt": "{file:./phat_trien_loi/prompts/lead.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "task": "deny",
+        "question": "allow",
+        "todowrite": "allow",
+        "bash": {
+          "*": "ask",
+          "python run.py *": "allow",
+          "python *run.py *": "allow",
+          "*run.py*": "allow",
+          "python -m aiscan*": "allow",
+          "date *": "allow",
+          "ls *": "allow",
+          "ls": "allow",
+          "git status*": "allow",
+          "git -C * status*": "allow",
+          "git ls-files*": "allow",
+          "git -C * ls-files*": "allow",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-inventory": {
+      "description": "Chia repo thanh cac component de ra soat an toan thong tin; ke den moi thu muc top-level. Khong san lo hong.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.1,
+      "prompt": "{file:./phat_trien_loi/prompts/scan-inventory.md}",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "task": "deny",
+        "todowrite": "deny"
+      }
+    },
+    "aiscan-threat-model": {
+      "description": "Mo hinh hoa mot component: entry point, sink, gia dinh, ranh gioi tin cay, file trong yeu. Khong bao lo hong.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.1,
+      "prompt": "{file:./phat_trien_loi/prompts/threat-model.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "task": "deny",
+        "todowrite": "deny",
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-researcher": {
+      "description": "San lo hong trong mot component qua mot lens chu de. Chi bao loi that, moi loi phai chi duoc dong ma cho phep.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.2,
+      "prompt": "{file:./phat_trien_loi/prompts/scan-researcher.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "todowrite": "deny",
+        "task": {
+          "aiscan-explore": "allow",
+          "*": "deny"
+        },
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-sweep": {
+      "description": "Luot lap khoang trong: file ngoai cac path da phu, lo hong nam giua cac component, va secret commit nham.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.2,
+      "prompt": "{file:./phat_trien_loi/prompts/sweep.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "todowrite": "deny",
+        "task": {
+          "aiscan-explore": "allow",
+          "*": "deny"
+        },
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-verifier": {
+      "description": "Bo phieu tren mot ung vien qua dung mot lens (REACHABILITY, IMPACT hoac DEFENSES). Nhiem vu la chung minh no sai.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.1,
+      "prompt": "{file:./phat_trien_loi/prompts/scan-verifier.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "todowrite": "deny",
+        "task": {
+          "aiscan-explore": "allow",
+          "*": "deny"
+        },
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-red-team": {
+      "description": "Chi o muc max: chot chan cuoi cung, xet ca ba lens cung luc de tim ly do manh nhat cho thay finding la false positive.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.1,
+      "prompt": "{file:./phat_trien_loi/prompts/red-team.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "todowrite": "deny",
+        "task": {
+          "aiscan-explore": "allow",
+          "*": "deny"
+        },
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    },
+    "aiscan-explore": {
+      "description": "Do duong ma nguon chi doc cho cac vai khac: tim file, lan theo mot luong, tim moi cho goi mot ham.",
+      "mode": "all",
+      "model": "codevgw/zai-org/GLM-5.3-Flash",
+      "temperature": 0.1,
+      "prompt": "{file:./phat_trien_loi/prompts/explore.md}",
+      "permission": {
+        "edit": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "task": "deny",
+        "todowrite": "deny",
+        "bash": {
+          "*": "deny",
+          "git -C * log *": "allow",
+          "git -C * show *": "allow",
+          "git -C * blame *": "allow"
+        }
+      }
+    }
+  }
+}

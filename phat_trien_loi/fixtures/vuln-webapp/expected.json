@@ -1,0 +1,145 @@
+{
+  "note": "Dap an cua vuln-webapp. Moi muc la mot lo hong co chu dich.",
+  "clean_files": [
+    "app/safe.py"
+  ],
+  "total": 17,
+  "vulnerabilities": [
+    {
+      "id": "V1",
+      "file": "app/db.py",
+      "line": 16,
+      "cwe": "CWE-89",
+      "severity": "CRITICAL",
+      "title": "SQL injection qua noi chuoi trong find_by_name"
+    },
+    {
+      "id": "V2",
+      "file": "app/db.py",
+      "line": 27,
+      "cwe": "CWE-89",
+      "severity": "CRITICAL",
+      "title": "SQL injection qua ten cot va thu tu sap xep trong search"
+    },
+    {
+      "id": "V3",
+      "file": "app/auth.py",
+      "line": 9,
+      "cwe": "CWE-798",
+      "severity": "HIGH",
+      "title": "Khoa ky JWT hard-code"
+    },
+    {
+      "id": "V4",
+      "file": "app/auth.py",
+      "line": 10,
+      "cwe": "CWE-798",
+      "severity": "HIGH",
+      "title": "Mat khau quan tri hard-code"
+    },
+    {
+      "id": "V5",
+      "file": "app/auth.py",
+      "line": 16,
+      "cwe": "CWE-327",
+      "severity": "HIGH",
+      "title": "Bam mat khau bang MD5, khong salt"
+    },
+    {
+      "id": "V6",
+      "file": "app/auth.py",
+      "line": 21,
+      "cwe": "CWE-208",
+      "severity": "LOW",
+      "title": "So sanh bam khong theo thoi gian hang dinh"
+    },
+    {
+      "id": "V7",
+      "file": "app/auth.py",
+      "line": 32,
+      "cwe": "CWE-347",
+      "severity": "CRITICAL",
+      "title": "Doc JWT ma khong kiem chu ky"
+    },
+    {
+      "id": "V8",
+      "file": "app/auth.py",
+      "line": 37,
+      "cwe": "CWE-338",
+      "severity": "HIGH",
+      "title": "Ma dat lai mat khau sinh bang PRNG khong an toan"
+    },
+    {
+      "id": "V9",
+      "file": "app/files.py",
+      "line": 13,
+      "cwe": "CWE-22",
+      "severity": "HIGH",
+      "title": "Path traversal khi doc file tai len"
+    },
+    {
+      "id": "V10",
+      "file": "app/files.py",
+      "line": 28,
+      "cwe": "CWE-78",
+      "severity": "CRITICAL",
+      "title": "Command injection qua shell=True"
+    },
+    {
+      "id": "V11",
+      "file": "app/files.py",
+      "line": 34,
+      "cwe": "CWE-78",
+      "severity": "HIGH",
+      "title": "Command injection qua os.system"
+    },
+    {
+      "id": "V12",
+      "file": "app/files.py",
+      "line": 39,
+      "cwe": "CWE-502",
+      "severity": "CRITICAL",
+      "title": "Giai tuan tu du lieu khong dang tin bang pickle"
+    },
+    {
+      "id": "V13",
+      "file": "app/views.py",
+      "line": 38,
+      "cwe": "CWE-79",
+      "severity": "HIGH",
+      "title": "XSS phan chieu trong route /greet"
+    },
+    {
+      "id": "V14",
+      "file": "app/views.py",
+      "line": 45,
+      "cwe": "CWE-601",
+      "severity": "MEDIUM",
+      "title": "Open redirect trong route /go"
+    },
+    {
+      "id": "V15",
+      "file": "app/views.py",
+      "line": 31,
+      "cwe": "CWE-639",
+      "severity": "HIGH",
+      "title": "IDOR: khong kiem quyen tren id ho so"
+    },
+    {
+      "id": "V16",
+      "file": "app/views.py",
+      "line": 69,
+      "cwe": "CWE-862",
+      "severity": "CRITICAL",
+      "title": "Route quan tri khong kiem quyen admin"
+    },
+    {
+      "id": "V17",
+      "file": "app/views.py",
+      "line": 74,
+      "cwe": "CWE-489",
+      "severity": "MEDIUM",
+      "title": "Bat debug mode va lang nghe moi giao dien"
+    }
+  ]
+}
