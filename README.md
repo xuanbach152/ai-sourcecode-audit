@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="thiet_ke/banner.svg" alt="AIScan — AI review source code · v0.1.0 · Codev / Viettel VTNET" width="480">
+  <img src="thiet_ke/banner.svg" alt="AIScan — AI review source code · v0.1.0 · Codev / Viettel VTNET" width="660">
 </div>
 
-# AIScan — Công cụ AI đánh giá an toàn thông tin source code
+# AI-Scan — Công cụ AI đánh giá an toàn thông tin source code
 
 Công cụ/agent nội bộ dùng LLM đánh giá an toàn thông tin source code, chạy trên
 **Codev Code** (fork của OpenCode) với LLM nội bộ, tích hợp vào **Codev/GitLab**
